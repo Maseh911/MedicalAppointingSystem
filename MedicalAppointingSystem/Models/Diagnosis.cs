@@ -10,7 +10,7 @@ namespace MedicalAppointingSystem.Models
         public int DiagnosisId { get; set; }
         public string Diagnosis_Name { get; set; }
 
-        [ForeignKey("Patients")]
+        [ForeignKey("Patient")]
         public List<Patient> Patients { get; set; }
     }
 }
