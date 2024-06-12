@@ -10,9 +10,11 @@ namespace MedicalAppointingSystem.Models
         public int DoctorId { get; set; }
 
         [MaxLength(20)]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [MaxLength(20)]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [MaxLength(11), Phone]

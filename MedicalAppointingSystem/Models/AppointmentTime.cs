@@ -8,6 +8,8 @@ namespace MedicalAppointingSystem.Models
     {
         [Key]
         public int AppointedId { get; set; }
+        [Required]
+        [Display(Name = "Appointment Time")]
         public DateTime AppointedTime { get; set; }
 
         [ForeignKey("Patients")]

@@ -6,7 +6,7 @@ var connectionString = builder.Configuration.GetConnectionString("MedicalAppoint
 
 builder.Services.AddDbContext<MedicalAppointingDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<MedicalAppointingUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<MedicalAppointingDbContext>();
+builder.Services.AddDefaultIdentity<MedicalAppointingUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<MedicalAppointingDbContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

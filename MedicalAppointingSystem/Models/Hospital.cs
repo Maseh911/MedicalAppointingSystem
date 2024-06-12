@@ -8,7 +8,10 @@ namespace MedicalAppointingSystem.Models
     {
         [Key]
         public int HospitalId { get; set; }
+        [Required]
+        [Display(Name = "Hospital Name")]
         public string HospitalName { get; set; }
+        [Display(Name = "Address")]
         public string Address { get; set; }
 
         public List<Doctor> Doctors { get; set; }

@@ -8,6 +8,8 @@ namespace MedicalAppointingSystem.Models
     {
         [Key]
         public int DiagnosisId { get; set; }
+        [Required]
+        [Display(Name = "Diagnosis Name")]
         public string Diagnosis_Name { get; set; }
 
         [ForeignKey("Patient")]

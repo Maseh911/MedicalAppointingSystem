@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MedicalAppointingSystem.Models;
 
 namespace MedicalAppointingSystem.Areas.Identity.Data;
 
@@ -22,6 +23,16 @@ public class MedicalAppointingDbContext : IdentityDbContext<MedicalAppointingUse
 
         builder.ApplyConfiguration(new PatientUserEntityConfiguration());
     }
+
+public DbSet<MedicalAppointingSystem.Models.AppointmentTime> AppointmentTime { get; set; } = default!;
+
+public DbSet<MedicalAppointingSystem.Models.Diagnosis> Diagnosis { get; set; } = default!;
+
+public DbSet<MedicalAppointingSystem.Models.Hospital> Hospital { get; set; } = default!;
+
+public DbSet<MedicalAppointingSystem.Models.Doctor> Doctor { get; set; } = default!;
+
+public DbSet<MedicalAppointingSystem.Models.Patient> Patient { get; set; } = default!;
 }
 
 public class PatientUserEntityConfiguration : IEntityTypeConfiguration<MedicalAppointingUser>
