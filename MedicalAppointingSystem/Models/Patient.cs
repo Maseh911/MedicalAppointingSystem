@@ -37,6 +37,7 @@ namespace MedicalAppointingSystem.Models
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }
         public int DiagnosisId { get; set; }
+        
 
         public List<Diagnosis> Diagnosis { get; set; }
         public List<AppointmentTime> AppointmentTime { get; set; }
