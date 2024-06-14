@@ -59,7 +59,7 @@ namespace MedicalAppointingSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PatientsId,FirstName,LastName,Phone,Email,Address,DoctorId,DiagnosisId")] Patient patient)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(patient);
                 await _context.SaveChangesAsync();
@@ -98,7 +98,7 @@ namespace MedicalAppointingSystem.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {

@@ -59,7 +59,7 @@ namespace MedicalAppointingSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AppointedId,AppointedTime,PatientId")] AppointmentTime appointmentTime)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(appointmentTime);
                 await _context.SaveChangesAsync();
@@ -98,7 +98,7 @@ namespace MedicalAppointingSystem.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
