@@ -20,10 +20,22 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: AppointmentTime
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            var medicalAppointingDbContext = _context.AppointmentTime.Include(a => a.Patients);
-            return View(await medicalAppointingDbContext.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            var appointmentTimes = from a in _context.AppointmentTime
+                                   select a;
+            switch (sortOrder)
+            {
+                case "Date":
+                    appointmentTimes = appointmentTimes.OrderBy(a => a.AppointedTime);
+                    break;
+                case "date_desc":
+                    appointmentTimes = appointmentTimes.OrderByDescending(s => s.AppointedTime);
+                    break;
+            }
+            return View(await appointmentTimes.AsNoTracking().ToListAsync());
         }
 
         // GET: AppointmentTime/Details/5

@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -77,6 +78,14 @@ namespace MedicalAppointingSystem.Migrations
                         principalTable: "Doctor",
                         principalColumn: "DoctorId",
                         onDelete: ReferentialAction.Cascade);
+
+                    table.ForeignKey(
+                        name: "FK_Patient_Diagnosis_DiagnosisId",
+                        column: x => x.DiagnosisId,
+                        principalTable: "Diagnosis",
+                        principalColumn: "DiagnosisId",
+                        onDelete: ReferentialAction.Cascade);
+
                 });
 
             migrationBuilder.CreateTable(

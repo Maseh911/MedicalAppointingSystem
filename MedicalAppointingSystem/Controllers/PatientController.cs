@@ -20,10 +20,23 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Patient
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            var medicalAppointingDbContext = _context.Patient.Include(p => p.Doctor);
-            return View(await medicalAppointingDbContext.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            var patients = from p in _context.Patient
+                           select p;
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    patients = patients.OrderByDescending(p => p.LastName);
+                    break;
+                default:
+                    patients = patients.OrderBy(p => p.LastName);
+                    break;
+            }
+            return View(await patients.AsNoTracking().ToListAsync());
+        
         }
 
         // GET: Patient/Details/5

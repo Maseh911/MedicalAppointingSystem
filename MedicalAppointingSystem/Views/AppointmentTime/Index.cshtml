@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AppointedTime)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">@Html.DisplayNameFor(model => model.AppointedTime)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Patients)
