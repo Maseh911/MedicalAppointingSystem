@@ -4,6 +4,7 @@ using MedicalAppointingSystem.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalAppointingSystem.Migrations
 {
     [DbContext(typeof(MedicalAppointingDbContext))]
-    partial class MedicalAppointingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240623223155_Tables")]
+    partial class Tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace MedicalAppointingSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("DiagnosisPatient", b =>
-                {
-                    b.Property<int>("Patient")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PatientsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Patient", "PatientsId");
-
-                    b.HasIndex("PatientsId");
-
-                    b.ToTable("DiagnosisPatient");
-                });
 
             modelBuilder.Entity("DoctorHospital", b =>
                 {
@@ -260,6 +248,8 @@ namespace MedicalAppointingSystem.Migrations
 
                     b.HasKey("PatientsId");
 
+                    b.HasIndex("DiagnosisId");
+
                     b.HasIndex("DoctorId");
 
                     b.ToTable("Patient");
@@ -402,21 +392,6 @@ namespace MedicalAppointingSystem.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DiagnosisPatient", b =>
-                {
-                    b.HasOne("MedicalAppointingSystem.Models.Diagnosis", null)
-                        .WithMany()
-                        .HasForeignKey("Patient")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MedicalAppointingSystem.Models.Patient", null)
-                        .WithMany()
-                        .HasForeignKey("PatientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DoctorHospital", b =>
                 {
                     b.HasOne("MedicalAppointingSystem.Models.Doctor", null)
@@ -445,11 +420,19 @@ namespace MedicalAppointingSystem.Migrations
 
             modelBuilder.Entity("MedicalAppointingSystem.Models.Patient", b =>
                 {
+                    b.HasOne("MedicalAppointingSystem.Models.Diagnosis", "Diagnosis")
+                        .WithMany("Patients")
+                        .HasForeignKey("DiagnosisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MedicalAppointingSystem.Models.Doctor", "Doctor")
                         .WithMany("Patients")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Diagnosis");
 
                     b.Navigation("Doctor");
                 });
@@ -503,6 +486,11 @@ namespace MedicalAppointingSystem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.Diagnosis", b =>
+                {
+                    b.Navigation("Patients");
                 });
 
             modelBuilder.Entity("MedicalAppointingSystem.Models.Doctor", b =>

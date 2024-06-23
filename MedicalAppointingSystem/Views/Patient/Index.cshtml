@@ -9,17 +9,6 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
-    </div>
-</form>
-
 <table class="table">
     <thead>
         <tr>
@@ -27,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.LastName)</a>
+                @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Phone)
@@ -42,7 +31,7 @@
                 @Html.DisplayNameFor(model => model.Doctor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DiagnosisId)
+                @Html.DisplayNameFor(model => model.Diagnosis)
             </th>
             <th></th>
         </tr>
@@ -66,10 +55,10 @@
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Doctor.DoctorId)
+                @Html.DisplayFor(modelItem => item.Doctor.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DiagnosisId)
+                @Html.DisplayFor(modelItem => item.Diagnosis.Diagnosis_Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PatientsId">Edit</a> |

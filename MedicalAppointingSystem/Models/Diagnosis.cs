@@ -12,7 +12,6 @@ namespace MedicalAppointingSystem.Models
         [Display(Name = "Diagnosis Name")]
         public string Diagnosis_Name { get; set; }
 
-        [ForeignKey("Patient")]
         public List<Patient> Patients { get; set; }
     }
 }

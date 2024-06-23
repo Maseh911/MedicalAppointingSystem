@@ -33,13 +33,17 @@ namespace MedicalAppointingSystem.Models
         [Display(Name = "Home Address")]
         public string Address { get; set; }
 
+        [Display(Name = "Doctor")]
         [ForeignKey("Doctor")]
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }
-        public int DiagnosisId { get; set; }
-        
 
-        public List<Diagnosis> Diagnosis { get; set; }
+        [Display(Name = "Diagnosis")]
+        [ForeignKey("Diagnosis")]
+        public int DiagnosisId { get; set; }
+
+        public Diagnosis Diagnosis { get; set; }
+
         public List<AppointmentTime> AppointmentTime { get; set; }
     }
 }

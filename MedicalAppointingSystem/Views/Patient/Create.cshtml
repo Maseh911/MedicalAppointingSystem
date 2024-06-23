@@ -43,8 +43,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="DiagnosisId" class="control-label"></label>
-                <input asp-for="DiagnosisId" class="form-control" />
-                <span asp-validation-for="DiagnosisId" class="text-danger"></span>
+                <select asp-for="DiagnosisId" class ="form-control" asp-items="ViewBag.DiagnosisId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

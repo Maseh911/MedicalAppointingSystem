@@ -20,40 +20,23 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Patient
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index()
         {
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            ViewData["CurrentFilter"] = searchString;
-            var patients = from p in _context.Patient
-                           select p;
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                patients = patients.Where(s => s.LastName.Contains(searchString)
-                                       || s.FirstName.Contains(searchString));
-            }
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    patients = patients.OrderByDescending(p => p.LastName);
-                    break;
-                default:
-                    patients = patients.OrderBy(p => p.LastName);
-                    break;
-            }
-            return View(await patients.AsNoTracking().ToListAsync());
-        
+            var medicalAppointingDbContext = _context.Patient.Include(p => p.Diagnosis).Include(p => p.Doctor);
+            return View(await medicalAppointingDbContext.ToListAsync());
         }
 
         // GET: Patient/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
+
             {
                 return NotFound();
             }
 
             var patient = await _context.Patient
+                .Include(p => p.Diagnosis)
                 .Include(p => p.Doctor)
                 .FirstOrDefaultAsync(m => m.PatientsId == id);
             if (patient == null)
@@ -67,7 +50,8 @@ namespace MedicalAppointingSystem.Controllers
         // GET: Patient/Create
         public IActionResult Create()
         {
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "DoctorId");
+            ViewData["DiagnosisId"] = new SelectList(_context.Diagnosis, "DiagnosisId", "Diagnosis_Name");
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "FirstName");
             return View();
         }
 
@@ -84,7 +68,8 @@ namespace MedicalAppointingSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "DoctorId", patient.DoctorId);
+            ViewData["DiagnosisId"] = new SelectList(_context.Diagnosis, "DiagnosisId", "Diagnosis_Name", patient.DiagnosisId);
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "DoctorId", patient.Doctor.FirstName);
             return View(patient);
         }
 
@@ -101,6 +86,7 @@ namespace MedicalAppointingSystem.Controllers
             {
                 return NotFound();
             }
+            ViewData["DiagnosisId"] = new SelectList(_context.Diagnosis, "DiagnosisId", "Diagnosis_Name", patient.DiagnosisId);
             ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "DoctorId", patient.DoctorId);
             return View(patient);
         }
@@ -137,6 +123,7 @@ namespace MedicalAppointingSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["DiagnosisId"] = new SelectList(_context.Diagnosis, "DiagnosisId", "Diagnosis_Name", patient.DiagnosisId);
             ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "DoctorId", patient.DoctorId);
             return View(patient);
         }
@@ -150,6 +137,7 @@ namespace MedicalAppointingSystem.Controllers
             }
 
             var patient = await _context.Patient
+                .Include(p => p.Diagnosis)
                 .Include(p => p.Doctor)
                 .FirstOrDefaultAsync(m => m.PatientsId == id);
             if (patient == null)
