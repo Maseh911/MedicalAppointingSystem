@@ -4,7 +4,6 @@ using MedicalAppointingSystem.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalAppointingSystem.Migrations
 {
     [DbContext(typeof(MedicalAppointingDbContext))]
-    [Migration("20240611220853_InitMedicalAppointingUser")]
-    partial class InitMedicalAppointingUser
+    partial class MedicalAppointingDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,6 +21,21 @@ namespace MedicalAppointingSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DoctorHospital", b =>
+                {
+                    b.Property<int>("Hospital")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HospitalsHospitalId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Hospital", "HospitalsHospitalId");
+
+                    b.HasIndex("HospitalsHospitalId");
+
+                    b.ToTable("DoctorHospital", (string)null);
+                });
 
             modelBuilder.Entity("MedicalAppointingSystem.Areas.Identity.Data.MedicalAppointingUser", b =>
                 {
@@ -98,6 +110,146 @@ namespace MedicalAppointingSystem.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.AppointmentTime", b =>
+                {
+                    b.Property<int>("AppointedId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppointedId"));
+
+                    b.Property<DateTime>("AppointedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppointedId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("AppointmentTime", (string)null);
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.Diagnosis", b =>
+                {
+                    b.Property<int>("DiagnosisId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DiagnosisId"));
+
+                    b.Property<string>("Diagnosis_Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DiagnosisId");
+
+                    b.ToTable("Diagnosis", (string)null);
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.Doctor", b =>
+                {
+                    b.Property<int>("DoctorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoctorId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.HasKey("DoctorId");
+
+                    b.ToTable("Doctor", (string)null);
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.Hospital", b =>
+                {
+                    b.Property<int>("HospitalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HospitalId"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HospitalName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HospitalId");
+
+                    b.ToTable("Hospital", (string)null);
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.Patient", b =>
+                {
+                    b.Property<int>("PatientsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PatientsId"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("DiagnosisId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.HasKey("PatientsId");
+
+                    b.HasIndex("DiagnosisId");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("Patient", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -237,6 +389,51 @@ namespace MedicalAppointingSystem.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DoctorHospital", b =>
+                {
+                    b.HasOne("MedicalAppointingSystem.Models.Doctor", null)
+                        .WithMany()
+                        .HasForeignKey("Hospital")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedicalAppointingSystem.Models.Hospital", null)
+                        .WithMany()
+                        .HasForeignKey("HospitalsHospitalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.AppointmentTime", b =>
+                {
+                    b.HasOne("MedicalAppointingSystem.Models.Patient", "Patients")
+                        .WithMany("AppointmentTime")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.Patient", b =>
+                {
+                    b.HasOne("MedicalAppointingSystem.Models.Diagnosis", "Diagnosis")
+                        .WithMany("Patients")
+                        .HasForeignKey("DiagnosisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedicalAppointingSystem.Models.Doctor", "Doctor")
+                        .WithMany("Patients")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Diagnosis");
+
+                    b.Navigation("Doctor");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -286,6 +483,21 @@ namespace MedicalAppointingSystem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.Diagnosis", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.Doctor", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("MedicalAppointingSystem.Models.Patient", b =>
+                {
+                    b.Navigation("AppointmentTime");
                 });
 #pragma warning restore 612, 618
         }

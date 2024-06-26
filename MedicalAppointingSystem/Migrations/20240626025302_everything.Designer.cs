@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalAppointingSystem.Migrations
 {
     [DbContext(typeof(MedicalAppointingDbContext))]
-    [Migration("20240623223155_Tables")]
-    partial class Tables
+    [Migration("20240626025302_everything")]
+    partial class everything
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

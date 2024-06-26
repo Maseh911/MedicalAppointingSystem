@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MedicalAppointingSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMedicalAppointingUser : Migration
+    public partial class everything : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,6 +50,49 @@ namespace MedicalAppointingSystem.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Diagnosis",
+                columns: table => new
+                {
+                    DiagnosisId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Diagnosis_Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Diagnosis", x => x.DiagnosisId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Doctor",
+                columns: table => new
+                {
+                    DoctorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doctor", x => x.DoctorId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Hospital",
+                columns: table => new
+                {
+                    HospitalId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HospitalName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hospital", x => x.HospitalId);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,6 +201,86 @@ namespace MedicalAppointingSystem.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Patient",
+                columns: table => new
+                {
+                    PatientsId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    DiagnosisId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patient", x => x.PatientsId);
+                    table.ForeignKey(
+                        name: "FK_Patient_Diagnosis_DiagnosisId",
+                        column: x => x.DiagnosisId,
+                        principalTable: "Diagnosis",
+                        principalColumn: "DiagnosisId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Patient_Doctor_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctor",
+                        principalColumn: "DoctorId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DoctorHospital",
+                columns: table => new
+                {
+                    Hospital = table.Column<int>(type: "int", nullable: false),
+                    HospitalsHospitalId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DoctorHospital", x => new { x.Hospital, x.HospitalsHospitalId });
+                    table.ForeignKey(
+                        name: "FK_DoctorHospital_Doctor_Hospital",
+                        column: x => x.Hospital,
+                        principalTable: "Doctor",
+                        principalColumn: "DoctorId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DoctorHospital_Hospital_HospitalsHospitalId",
+                        column: x => x.HospitalsHospitalId,
+                        principalTable: "Hospital",
+                        principalColumn: "HospitalId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppointmentTime",
+                columns: table => new
+                {
+                    AppointedId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppointedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppointmentTime", x => x.AppointedId);
+                    table.ForeignKey(
+                        name: "FK_AppointmentTime_Patient_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patient",
+                        principalColumn: "PatientsId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentTime_PatientId",
+                table: "AppointmentTime",
+                column: "PatientId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -196,11 +319,29 @@ namespace MedicalAppointingSystem.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoctorHospital_HospitalsHospitalId",
+                table: "DoctorHospital",
+                column: "HospitalsHospitalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patient_DiagnosisId",
+                table: "Patient",
+                column: "DiagnosisId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patient_DoctorId",
+                table: "Patient",
+                column: "DoctorId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AppointmentTime");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -217,10 +358,25 @@ namespace MedicalAppointingSystem.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "DoctorHospital");
+
+            migrationBuilder.DropTable(
+                name: "Patient");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Hospital");
+
+            migrationBuilder.DropTable(
+                name: "Diagnosis");
+
+            migrationBuilder.DropTable(
+                name: "Doctor");
         }
     }
 }
