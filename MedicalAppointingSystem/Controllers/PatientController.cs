@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
 using MedicalAppointingSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalAppointingSystem.Controllers
 {
+    [Authorize]
     public class PatientController : Controller
     {
         private readonly MedicalAppointingDbContext _context;
@@ -20,10 +22,27 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Patient
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            var medicalAppointingDbContext = _context.Patient.Include(p => p.Diagnosis).Include(p => p.Doctor);
-            return View(await medicalAppointingDbContext.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            var patients = from p in _context.Patient.Include(p => p.Doctor).Include(p => p.Diagnosis) select p;
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    patients = patients.OrderByDescending(s => s.LastName);
+                    break;
+                case "Date":
+                    patients = patients.OrderBy(a => a.AppointmentTime);
+                    break;
+                case "date_desc":
+                    patients = patients.OrderByDescending(s => s.AppointmentTime);
+                    break;
+                default:
+                    patients = patients.OrderBy(s => s.LastName);
+                    break;
+            }
+            return View(await patients.AsNoTracking().ToListAsync());
         }
 
         // GET: Patient/Details/5

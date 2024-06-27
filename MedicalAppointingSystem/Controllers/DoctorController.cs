@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
 using MedicalAppointingSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalAppointingSystem.Controllers
 {
+    [Authorize]
     public class DoctorController : Controller
     {
         private readonly MedicalAppointingDbContext _context;
@@ -23,7 +25,6 @@ namespace MedicalAppointingSystem.Controllers
         public async Task<IActionResult> Index(string sortOrder)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             var doctors = from d in _context.Doctor
                            select d;
             switch (sortOrder)
