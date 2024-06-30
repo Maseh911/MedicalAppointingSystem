@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
 using MedicalAppointingSystem.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Permissions;
 
 namespace MedicalAppointingSystem.Controllers
 {
@@ -22,27 +23,39 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Patient
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder)? "name_desc" : "";
+
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+                ViewData["CurrentFilter"] = searchString;
             var patients = from p in _context.Patient.Include(p => p.Doctor).Include(p => p.Diagnosis) select p;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                patients = patients.Where(p => p.LastName.Contains(searchString)
+                                       || p.FirstName.Contains(searchString));
+            }
             switch (sortOrder)
             {
                 case "name_desc":
                     patients = patients.OrderByDescending(s => s.LastName);
                     break;
-                case "Date":
-                    patients = patients.OrderBy(a => a.AppointmentTime);
-                    break;
-                case "date_desc":
-                    patients = patients.OrderByDescending(s => s.AppointmentTime);
-                    break;
                 default:
                     patients = patients.OrderBy(s => s.LastName);
                     break;
             }
-            return View(await patients.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Patient>.CreateAsync(patients.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Patient/Details/5

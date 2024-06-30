@@ -22,11 +22,16 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Doctor
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            var doctors = from d in _context.Doctor
-                           select d;
+            ViewData["CurrentFilter"] = searchString;
+            var doctors = from d in _context.Doctor select d;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                doctors = doctors.Where(d => d.LastName.Contains(searchString)
+                                       || d.FirstName.Contains(searchString));
+            }
             switch (sortOrder)
             {
                 case "name_desc":

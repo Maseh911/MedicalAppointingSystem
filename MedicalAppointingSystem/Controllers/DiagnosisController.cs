@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
 using MedicalAppointingSystem.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Data.SqlClient;
 
 namespace MedicalAppointingSystem.Controllers
 {
@@ -22,7 +23,7 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Diagnosis
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
             return View(await _context.Diagnosis.ToListAsync());
         }
