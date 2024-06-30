@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using MedicalAppointingSystem.Attributes;
 
 namespace MedicalAppointingSystem.Areas.Identity.Pages.Account
 {
@@ -72,13 +73,15 @@ namespace MedicalAppointingSystem.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [StringLength(255, ErrorMessage ="The first name field should have a maxmimum of 255 characters")]
+            [StringLength(255)]
             [Display(Name = "First Name")]
+            [NoSpacesOrNumbersOrSymbolsAttribute (ErrorMessage = "The field must contain only letters and no numbers, spaces, or special characters.")]
             public string FirstName { get; set; }
 
             [Required]
-            [StringLength(255, ErrorMessage = "The last name field should have a maxmimum of 255 characters")]
+            [StringLength(255)]
             [Display(Name = "Last Name")]
+            [NoSpacesOrNumbersOrSymbolsAttribute]
             public string LastName { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -103,6 +106,9 @@ namespace MedicalAppointingSystem.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            /// 
+
+            [Required]
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]

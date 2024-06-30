@@ -3,37 +3,22 @@ using System.Text.RegularExpressions;
 
 namespace MedicalAppointingSystem.Attributes
 {
-    public class NoSpacesOrNumbersAttribute : RegularExpressionAttribute
+    public class NoSpacesOrNumbersOrSymbolsAttribute : RegularExpressionAttribute
     {
-        public NoSpacesOrNumbersAttribute()
+        public NoSpacesOrNumbersOrSymbolsAttribute()
             : base(@"^[a-zA-Z]+$")
         {
-            ErrorMessage = "The field must contain only letters and no spaces.";
+            ErrorMessage = "The field must contain only letters and no numbers, spaces, or special characters.";
         }
     }
 
     public class NoNumbersAttribute : RegularExpressionAttribute
     {
         public NoNumbersAttribute()
-            : base("^[A-Za-z ]+$")
+            : base("^[a-zA-z]+$")
 
         {
             ErrorMessage = "The field must contain only letters and spaces and no numbers";
         }
-    }
-}
-public class NoSymbolsAttribute : ValidationAttribute
-{
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-    {
-        if (value != null)
-        {
-            var input = value.ToString();
-            if (!Regex.IsMatch(input, "^[a-zA-Z0-9]*$"))
-            {
-                return new ValidationResult("Only alphanumeric characters are allowed.");
-            }
-        }
-        return ValidationResult.Success;
     }
 }

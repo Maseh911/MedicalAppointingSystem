@@ -13,15 +13,15 @@ namespace MedicalAppointingSystem.Models
         public int PatientsId { get; set; }
 
         [Required(ErrorMessage = "First name is required.")]
-        [MaxLength(20)]
-        [NoSpacesOrNumbers]
+        [MaxLength(25)]
+        [NoSpacesOrNumbersOrSymbolsAttribute]
         [Display(Name = "First Name")]
 
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Last name is required.")]
-        [MaxLength(20)]
-        [NoSpacesOrNumbers]
+        [MaxLength(25)]
+        [NoSpacesOrNumbersOrSymbolsAttribute]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
@@ -37,7 +37,6 @@ namespace MedicalAppointingSystem.Models
 
         [MaxLength(50)]
         [Display(Name = "Home Address")]
-        [NoSymbolsAttribute]
         public string Address { get; set; }
 
         [Display(Name = "Doctor")]

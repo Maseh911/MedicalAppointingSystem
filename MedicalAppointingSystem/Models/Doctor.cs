@@ -12,18 +12,18 @@ namespace MedicalAppointingSystem.Models
 
         [Required(ErrorMessage = "First name is required")]
         [MaxLength(25)]
-        [NoSpacesOrNumbers]
+        [NoSpacesOrNumbersOrSymbolsAttribute]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Last name is required")]
         [MaxLength(25)]
-        [NoSpacesOrNumbers]
+        [NoSpacesOrNumbersOrSymbolsAttribute]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [MaxLength(11)]
-        [Phone]
+        [RegularExpression(@"^\+?\d{1,3}[- ]?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$", ErrorMessage = "Please enter a valid phone number.")]
         [Required(ErrorMessage = "Phone number is required")]
         public string Phone { get; set; }
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
+using MedicalAppointingSystem.Data;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MedicalAppointingDbContextConnection") ?? throw new InvalidOperationException("Connection string 'MedicalAppointingDbContextConnection' not found.");
 
@@ -21,6 +22,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+DatabaseStartup.StartUp(app);
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -34,3 +37,5 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+
