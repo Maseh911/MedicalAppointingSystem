@@ -1,4 +1,5 @@
-﻿using MedicalAppointingSystem.Models;
+﻿using MedicalAppointingSystem.Attributes;
+using MedicalAppointingSystem.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,18 +10,26 @@ namespace MedicalAppointingSystem.Models
         [Key]
         public int DoctorId { get; set; }
 
-        [MaxLength(20)]
+        [Required(ErrorMessage = "First name is required")]
+        [MaxLength(25)]
+        [NoSpacesOrNumbers]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
-        [MaxLength(20)]
+        [Required(ErrorMessage = "Last name is required")]
+        [MaxLength(25)]
+        [NoSpacesOrNumbers]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [MaxLength(11), Phone]
+        [MaxLength(11)]
+        [Phone]
+        [Required(ErrorMessage = "Phone number is required")]
         public string Phone { get; set; }
 
-        [MaxLength(50), EmailAddress]
+        [MaxLength(50)]
+        [EmailAddress]
+        [Required(ErrorMessage = "Email address is required")]
         public string Email { get; set; }
 
         [ForeignKey("Hospital")]

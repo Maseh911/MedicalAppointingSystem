@@ -8,7 +8,8 @@ namespace MedicalAppointingSystem.Models
     {
         [Key]
         public int DiagnosisId { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Name of Diagnosis is required")]
         [Display(Name = "Diagnosis Name")]
         public string Diagnosis_Name { get; set; }
 
