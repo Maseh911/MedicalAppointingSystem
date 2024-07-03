@@ -22,7 +22,6 @@ namespace MedicalAppointingSystem.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [MaxLength(11)]
         [RegularExpression(@"^\+?\d{1,3}[- ]?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$", ErrorMessage = "Please enter a valid phone number.")]
         [Required(ErrorMessage = "Phone number is required")]
         public string Phone { get; set; }
@@ -33,7 +32,10 @@ namespace MedicalAppointingSystem.Models
         public string Email { get; set; }
 
         [ForeignKey("Hospital")]
-        public List<Hospital> Hospitals { get; set; }
-        public List<Patient> Patients { get; set; }
+        [Required]
+        public int HospitalId { get; set; }
+        public Hospital Hospital { get; set; }
     }
 }
+
+

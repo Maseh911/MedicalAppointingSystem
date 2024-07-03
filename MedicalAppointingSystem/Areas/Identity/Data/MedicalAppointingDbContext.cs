@@ -24,7 +24,7 @@ public class MedicalAppointingDbContext : IdentityDbContext<MedicalAppointingUse
         builder.ApplyConfiguration(new PatientUserEntityConfiguration());
     }
 
-public DbSet<MedicalAppointingSystem.Models.AppointmentTime> AppointmentTime { get; set; } = default!;
+public DbSet<MedicalAppointingSystem.Models.Appointment> AppointmentTime { get; set; } = default!;
 
 public DbSet<MedicalAppointingSystem.Models.Diagnosis> Diagnosis { get; set; } = default!;
 

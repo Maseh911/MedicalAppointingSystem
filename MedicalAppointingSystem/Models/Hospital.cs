@@ -10,15 +10,18 @@ namespace MedicalAppointingSystem.Models
         [Key]
         public int HospitalId { get; set; }
     
-        [Required(ErrorMessage = "Hospital name is required")]
+        [Required]
         [Display(Name = "Hospital Name")]
+        [MaxLength(30)]
         [NoNumbers] 
         public string HospitalName { get; set; }
 
+        [Required]
         [Display(Name = "Address")]
+        [MaxLength(50)]
         [NoNumbers]
         public string Address { get; set; }
 
-        public List<Doctor> Doctors { get; set; }
+        public ICollection<Doctor> Doctors { get; set; }
     }
 }

@@ -7,11 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
 using MedicalAppointingSystem.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalAppointingSystem.Controllers
 {
-    [Authorize]
     public class DoctorController : Controller
     {
         private readonly MedicalAppointingDbContext _context;
@@ -22,26 +20,10 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Doctor
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index()
         {
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["CurrentFilter"] = searchString;
-            var doctors = from d in _context.Doctor select d;
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                doctors = doctors.Where(d => d.LastName.Contains(searchString)
-                                       || d.FirstName.Contains(searchString));
-            }
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    doctors = doctors.OrderByDescending(d => d.LastName);
-                    break;
-                default:
-                    doctors = doctors.OrderBy(p => p.LastName);
-                    break;
-            }
-            return View(await doctors.AsNoTracking().ToListAsync());
+            var medicalAppointingDbContext = _context.Doctor.Include(d => d.Hospital);
+            return View(await medicalAppointingDbContext.ToListAsync());
         }
 
         // GET: Doctor/Details/5
@@ -53,6 +35,7 @@ namespace MedicalAppointingSystem.Controllers
             }
 
             var doctor = await _context.Doctor
+                .Include(d => d.Hospital)
                 .FirstOrDefaultAsync(m => m.DoctorId == id);
             if (doctor == null)
             {
@@ -65,6 +48,7 @@ namespace MedicalAppointingSystem.Controllers
         // GET: Doctor/Create
         public IActionResult Create()
         {
+            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "Address");
             return View();
         }
 
@@ -73,14 +57,15 @@ namespace MedicalAppointingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DoctorId,FirstName,LastName,Phone,Email")] Doctor doctor)
+        public async Task<IActionResult> Create([Bind("DoctorId,FirstName,LastName,Phone,Email,HospitalId")] Doctor doctor)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Add(doctor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "Address", doctor.HospitalId);
             return View(doctor);
         }
 
@@ -97,6 +82,7 @@ namespace MedicalAppointingSystem.Controllers
             {
                 return NotFound();
             }
+            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "Address", doctor.HospitalId);
             return View(doctor);
         }
 
@@ -105,14 +91,14 @@ namespace MedicalAppointingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DoctorId,FirstName,LastName,Phone,Email")] Doctor doctor)
+        public async Task<IActionResult> Edit(int id, [Bind("DoctorId,FirstName,LastName,Phone,Email,HospitalId")] Doctor doctor)
         {
             if (id != doctor.DoctorId)
             {
                 return NotFound();
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -132,6 +118,7 @@ namespace MedicalAppointingSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "Address", doctor.HospitalId);
             return View(doctor);
         }
 
@@ -144,6 +131,7 @@ namespace MedicalAppointingSystem.Controllers
             }
 
             var doctor = await _context.Doctor
+                .Include(d => d.Hospital)
                 .FirstOrDefaultAsync(m => m.DoctorId == id);
             if (doctor == null)
             {

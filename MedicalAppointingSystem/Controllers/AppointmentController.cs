@@ -10,23 +10,23 @@ using MedicalAppointingSystem.Models;
 
 namespace MedicalAppointingSystem.Controllers
 {
-    public class PatientController : Controller
+    public class AppointmentController : Controller
     {
         private readonly MedicalAppointingDbContext _context;
 
-        public PatientController(MedicalAppointingDbContext context)
+        public AppointmentController(MedicalAppointingDbContext context)
         {
             _context = context;
         }
 
-        // GET: Patient
+        // GET: Appointment
         public async Task<IActionResult> Index()
         {
-            var medicalAppointingDbContext = _context.Patient.Include(p => p.Diagnosis);
+            var medicalAppointingDbContext = _context.AppointmentTime.Include(a => a.Doctor).Include(a => a.Patient);
             return View(await medicalAppointingDbContext.ToListAsync());
         }
 
-        // GET: Patient/Details/5
+        // GET: Appointment/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +34,45 @@ namespace MedicalAppointingSystem.Controllers
                 return NotFound();
             }
 
-            var patient = await _context.Patient
-                .Include(p => p.Diagnosis)
-                .FirstOrDefaultAsync(m => m.PatientId == id);
-            if (patient == null)
+            var appointment = await _context.AppointmentTime
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .FirstOrDefaultAsync(m => m.AppointmentId == id);
+            if (appointment == null)
             {
                 return NotFound();
             }
 
-            return View(patient);
+            return View(appointment);
         }
 
-        // GET: Patient/Create
+        // GET: Appointment/Create
         public IActionResult Create()
         {
-            ViewData["DiagnosisId"] = new SelectList(_context.Diagnosis, "DiagnosisId", "DiagnosisName");
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "Email");
+            ViewData["PatientId"] = new SelectList(_context.Patient, "PatientId", "FirstName");
             return View();
         }
 
-        // POST: Patient/Create
+        // POST: Appointment/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PatientId,FirstName,LastName,Phone,Email,Address,DiagnosisId")] Patient patient)
+        public async Task<IActionResult> Create([Bind("AppointmentId,Date,PatientId,DoctorId")] Appointment appointment)
         {
             if (!ModelState.IsValid)
             {
-                _context.Add(patient);
+                _context.Add(appointment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DiagnosisId"] = new SelectList(_context.Diagnosis, "DiagnosisId", "DiagnosisName", patient.DiagnosisId);
-            return View(patient);
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "Email", appointment.DoctorId);
+            ViewData["PatientId"] = new SelectList(_context.Patient, "PatientId", "FirstName", appointment.PatientId);
+            return View(appointment);
         }
 
-        // GET: Patient/Edit/5
+        // GET: Appointment/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +80,24 @@ namespace MedicalAppointingSystem.Controllers
                 return NotFound();
             }
 
-            var patient = await _context.Patient.FindAsync(id);
-            if (patient == null)
+            var appointment = await _context.AppointmentTime.FindAsync(id);
+            if (appointment == null)
             {
                 return NotFound();
             }
-            ViewData["DiagnosisId"] = new SelectList(_context.Diagnosis, "DiagnosisId", "DiagnosisName", patient.DiagnosisId);
-            return View(patient);
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "Email", appointment.DoctorId);
+            ViewData["PatientId"] = new SelectList(_context.Patient, "PatientId", "FirstName", appointment.PatientId);
+            return View(appointment);
         }
 
-        // POST: Patient/Edit/5
+        // POST: Appointment/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PatientId,FirstName,LastName,Phone,Email,Address,DiagnosisId")] Patient patient)
+        public async Task<IActionResult> Edit(int id, [Bind("AppointmentId,Date,PatientId,DoctorId")] Appointment appointment)
         {
-            if (id != patient.PatientId)
+            if (id != appointment.AppointmentId)
             {
                 return NotFound();
             }
@@ -102,12 +106,12 @@ namespace MedicalAppointingSystem.Controllers
             {
                 try
                 {
-                    _context.Update(patient);
+                    _context.Update(appointment);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PatientExists(patient.PatientId))
+                    if (!AppointmentExists(appointment.AppointmentId))
                     {
                         return NotFound();
                     }
@@ -118,11 +122,12 @@ namespace MedicalAppointingSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DiagnosisId"] = new SelectList(_context.Diagnosis, "DiagnosisId", "DiagnosisName", patient.DiagnosisId);
-            return View(patient);
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "Email", appointment.DoctorId);
+            ViewData["PatientId"] = new SelectList(_context.Patient, "PatientId", "FirstName", appointment.PatientId);
+            return View(appointment);
         }
 
-        // GET: Patient/Delete/5
+        // GET: Appointment/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +135,36 @@ namespace MedicalAppointingSystem.Controllers
                 return NotFound();
             }
 
-            var patient = await _context.Patient
-                .Include(p => p.Diagnosis)
-                .FirstOrDefaultAsync(m => m.PatientId == id);
-            if (patient == null)
+            var appointment = await _context.AppointmentTime
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .FirstOrDefaultAsync(m => m.AppointmentId == id);
+            if (appointment == null)
             {
                 return NotFound();
             }
 
-            return View(patient);
+            return View(appointment);
         }
 
-        // POST: Patient/Delete/5
+        // POST: Appointment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var patient = await _context.Patient.FindAsync(id);
-            if (patient != null)
+            var appointment = await _context.AppointmentTime.FindAsync(id);
+            if (appointment != null)
             {
-                _context.Patient.Remove(patient);
+                _context.AppointmentTime.Remove(appointment);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PatientExists(int id)
+        private bool AppointmentExists(int id)
         {
-            return _context.Patient.Any(e => e.PatientId == id);
+            return _context.AppointmentTime.Any(e => e.AppointmentId == id);
         }
     }
 }

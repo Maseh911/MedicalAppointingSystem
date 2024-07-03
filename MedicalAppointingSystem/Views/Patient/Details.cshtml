@@ -41,20 +41,14 @@
             @Html.DisplayFor(model => model.Address)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Doctor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Doctor.DoctorId)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Diagnosis)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Diagnosis.Diagnosis_Name)
+            @Html.DisplayFor(model => model.Diagnosis.DiagnosisName)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.PatientsId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.PatientId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

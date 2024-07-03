@@ -11,8 +11,12 @@ namespace MedicalAppointingSystem.Models
 
         [Required(ErrorMessage = "Name of Diagnosis is required")]
         [Display(Name = "Diagnosis Name")]
-        public string Diagnosis_Name { get; set; }
+        [MaxLength(30)]
+        public string DiagnosisName { get; set; }
 
-        public List<Patient> Patients { get; set; }
+        [Required]
+        [Display(Name ="Symptoms")]
+        [MaxLength(120)]
+        public string Symptoms { get; set; }
     }
 }

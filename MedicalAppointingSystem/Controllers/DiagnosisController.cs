@@ -7,12 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
 using MedicalAppointingSystem.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Data.SqlClient;
 
 namespace MedicalAppointingSystem.Controllers
 {
-    [Authorize]
     public class DiagnosisController : Controller
     {
         private readonly MedicalAppointingDbContext _context;
@@ -23,7 +20,7 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Diagnosis
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index()
         {
             return View(await _context.Diagnosis.ToListAsync());
         }
@@ -57,7 +54,7 @@ namespace MedicalAppointingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DiagnosisId,Diagnosis_Name")] Diagnosis diagnosis)
+        public async Task<IActionResult> Create([Bind("DiagnosisId,DiagnosisName,Symptoms")] Diagnosis diagnosis)
         {
             if (!ModelState.IsValid)
             {
@@ -89,7 +86,7 @@ namespace MedicalAppointingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DiagnosisId,Diagnosis_Name")] Diagnosis diagnosis)
+        public async Task<IActionResult> Edit(int id, [Bind("DiagnosisId,DiagnosisName,Symptoms")] Diagnosis diagnosis)
         {
             if (id != diagnosis.DiagnosisId)
             {

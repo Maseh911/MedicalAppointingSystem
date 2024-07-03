@@ -1,46 +1,34 @@
-﻿@model PaginatedList<MedicalAppointingSystem.Models.Patient>
+﻿@model IEnumerable<MedicalAppointingSystem.Models.Patient>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Patients</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
-    </div>
-</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                First Name
+                @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Last Name</a>
+                @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
-                Phone
+                @Html.DisplayNameFor(model => model.Phone)
             </th>
             <th>
-                Email
+                @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                Address
+                @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                Doctor
-            </th>
-            <th>
-                Diagnosis
+                @Html.DisplayNameFor(model => model.Diagnosis)
             </th>
             <th></th>
         </tr>
@@ -64,36 +52,14 @@
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Doctor.FirstName)
+                @Html.DisplayFor(modelItem => item.Diagnosis.DiagnosisName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Diagnosis.Diagnosis_Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PatientsId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PatientsId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PatientsId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.PatientId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PatientId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PatientId">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-@{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
-
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @prevDisabled">
-    Previous
-</a>
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    Next
-</a>

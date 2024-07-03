@@ -3,7 +3,7 @@ using MedicalAppointingSystem.Models;
 
 namespace MedicalAppointingSystem.Data
 {
-    public class DatabaseStartup 
+    public class DatabaseStartup
     {
         public static void StartUp(IApplicationBuilder applicationBuilder)
         {
@@ -16,25 +16,11 @@ namespace MedicalAppointingSystem.Data
                 {
                     return;
                 }
-                var Patients = new Patient[]
+                var Diagnosis = new Diagnosis[]
                 {
-                    new Patient { FirstName = "Maseh", LastName = "Essa", Phone = "0240489487", Email = "ac121658@avcol.school.nz", Address = "Avondale College", DoctorId = 1, DiagnosisId = 1},
+                    new Diagnosis { DiagnosisName = "ADHD", Symptoms = "crazy"}
                 };
-                Context.Patient.AddRange(Patients);
-                Context.SaveChanges();
-
-                var Doctors = new Doctor[]
-                {
-                    new Doctor { FirstName = "Homer", LastName = "Simpson", Phone = "02184739203", Email = "HomerSimpson@gmail.com"},
-                };
-                Context.Doctor.AddRange(Doctors);
-                Context.SaveChanges();
-
-                var AppointmentTimes = new AppointmentTime[]
-                {
-                    new AppointmentTime { AppointedTime = new DateTime(2024, 7, 23, 9, 15, 0), PatientId = 2},
-                };
-                Context.AppointmentTime.AddRange(AppointmentTimes);
+                Context.Diagnosis.AddRange(Diagnosis);
                 Context.SaveChanges();
 
                 var Hospitals = new Hospital[]
@@ -44,12 +30,26 @@ namespace MedicalAppointingSystem.Data
                 Context.Hospital.AddRange(Hospitals);
                 Context.SaveChanges();
 
-                var Diagnosis = new Diagnosis[]
+                var Patients = new Patient[]
                 {
-                    new Diagnosis { Diagnosis_Name = "ADHD"}
+                    new Patient { FirstName = "Maseh", LastName = "Essa", Phone = "0240489487", Email = "ac121658@avcol.school.nz", Address = "Avondale College", DiagnosisId = 1},
                 };
-                Context.Diagnosis.AddRange(Diagnosis);
+                Context.Patient.AddRange(Patients);
                 Context.SaveChanges();
+
+                var Doctors = new Doctor[]
+                {
+                    new Doctor { FirstName = "Homer", LastName = "Simpson", Phone = "02184739203", Email = "HomerSimpson@gmail.com", HospitalId = 1},
+                };
+                Context.Doctor.AddRange(Doctors);
+                Context.SaveChanges();
+
+                var AppointmentTimes = new Appointment[]
+                {
+                    new Appointment { Date = new DateTime(2024, 7, 23, 9, 15, 0), PatientId = 1, DoctorId = 1},
+                };
+                Context.AppointmentTime.AddRange(AppointmentTimes);
+                Context.SaveChanges(); 
             }
         }
     }
