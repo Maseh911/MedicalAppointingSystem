@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
 using MedicalAppointingSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalAppointingSystem.Controllers
 {
+    [Authorize]
     public class PatientController : Controller
     {
         private readonly MedicalAppointingDbContext _context;

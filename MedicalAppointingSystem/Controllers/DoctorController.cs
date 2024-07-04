@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
 using MedicalAppointingSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalAppointingSystem.Controllers
 {
+    [Authorize]
     public class DoctorController : Controller
     {
         private readonly MedicalAppointingDbContext _context;
@@ -48,7 +50,7 @@ namespace MedicalAppointingSystem.Controllers
         // GET: Doctor/Create
         public IActionResult Create()
         {
-            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "Address");
+            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "HospitalName");
             return View();
         }
 
@@ -65,7 +67,7 @@ namespace MedicalAppointingSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "Address", doctor.HospitalId);
+            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "HospitalName", doctor.HospitalId);
             return View(doctor);
         }
 
@@ -82,7 +84,7 @@ namespace MedicalAppointingSystem.Controllers
             {
                 return NotFound();
             }
-            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "Address", doctor.HospitalId);
+            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "HospitalName", doctor.HospitalId);
             return View(doctor);
         }
 
@@ -118,7 +120,7 @@ namespace MedicalAppointingSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "Address", doctor.HospitalId);
+            ViewData["HospitalId"] = new SelectList(_context.Hospital, "HospitalId", "HospitalName", doctor.HospitalId);
             return View(doctor);
         }
 

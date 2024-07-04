@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
 using MedicalAppointingSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalAppointingSystem.Controllers
 {
+    [Authorize]
     public class AppointmentController : Controller
     {
         private readonly MedicalAppointingDbContext _context;
@@ -49,7 +51,7 @@ namespace MedicalAppointingSystem.Controllers
         // GET: Appointment/Create
         public IActionResult Create()
         {
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "Email");
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "FirstName");
             ViewData["PatientId"] = new SelectList(_context.Patient, "PatientId", "FirstName");
             return View();
         }
@@ -67,7 +69,7 @@ namespace MedicalAppointingSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "Email", appointment.DoctorId);
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "FirstName", appointment.DoctorId);
             ViewData["PatientId"] = new SelectList(_context.Patient, "PatientId", "FirstName", appointment.PatientId);
             return View(appointment);
         }
@@ -85,7 +87,7 @@ namespace MedicalAppointingSystem.Controllers
             {
                 return NotFound();
             }
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "Email", appointment.DoctorId);
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "FirstName", appointment.DoctorId);
             ViewData["PatientId"] = new SelectList(_context.Patient, "PatientId", "FirstName", appointment.PatientId);
             return View(appointment);
         }
@@ -122,7 +124,7 @@ namespace MedicalAppointingSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "Email", appointment.DoctorId);
+            ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "FirstName", appointment.DoctorId);
             ViewData["PatientId"] = new SelectList(_context.Patient, "PatientId", "FirstName", appointment.PatientId);
             return View(appointment);
         }

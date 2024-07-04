@@ -11,7 +11,7 @@ namespace MedicalAppointingSystem.Models
        
         [Required(ErrorMessage = "Appointment Time is required")]
         [Display(Name = "Appointment Time")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{yyyy-MM-dd-HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
         [Required]
