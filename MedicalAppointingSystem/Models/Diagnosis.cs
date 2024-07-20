@@ -15,8 +15,8 @@ namespace MedicalAppointingSystem.Models
         [MaxLength(30)] // This limits the max characters for this field to 30 //
         public string DiagnosisName { get; set; }
 
-        [Required] // This is a required field //
-        [MaxLength(120)] // This limits the max characters for this field to 120 //
+        [Required (ErrorMessage = "Symptoms is required")] // This is a required field //
+        [MaxLength(50)] // This limits the max characters for this field to 50 //
         public string Symptoms { get; set; }
     }
 }

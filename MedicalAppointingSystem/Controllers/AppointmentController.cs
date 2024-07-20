@@ -43,10 +43,8 @@ namespace MedicalAppointingSystem.Controllers
             if (!String.IsNullOrEmpty(searchString))  // If the searchString is not empty then it will exectute the statement //
             {
                 appointments = appointments.Where(a => a.Patient.FirstName.Contains(searchString) // It can filter the patient's First name //
-                                       || a.Patient.LastName.Contains(searchString)     // It can filter the patient's Last name //
-                                       || a.Doctor.FirstName.Contains(searchString)     // It can filter the doctor's First name //
-                                       || a.Doctor.LastName.Contains(searchString));    // It can filter the doctor's Last name //
-            }
+                                       || a.Doctor.FirstName.Contains(searchString));     // It can filter the doctor's First name //
+            };
 
             switch (sortOrder)      // This is for the sorting //
             {

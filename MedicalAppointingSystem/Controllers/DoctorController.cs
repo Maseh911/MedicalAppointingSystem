@@ -27,7 +27,7 @@ namespace MedicalAppointingSystem.Controllers
         {
             ViewData["CurrentFilter"] = searchString;       // This will pass the value from the controller to the view to display the filtered value //
 
-            var doctors = from d in _context.Doctor select d;
+            var doctors = from d in _context.Doctor.Include(d => d.Hospital) select d;
 
             if (!String.IsNullOrEmpty(searchString))  // If the searchString is not empty then it will exectute the statement //
             {
