@@ -22,10 +22,30 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Patient
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString) // The sortOrder parameter represents the sort order of a list, The searchString parameter represents a keyword of a search which will be used for filtering //
         {
-            var medicalAppointingDbContext = _context.Patient.Include(p => p.Diagnosis);
-            return View(await medicalAppointingDbContext.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : ""; // This will determine the next sort order parameter based on the current order (if it has been selected/ordered yet) for name //
+            ViewData["CurrentFilter"] = searchString;       // This will pass the filter value from the controller to the view to display the filtered value //
+
+            var patients = from p in _context.Patient.Include(p => p.Diagnosis) select p;
+
+            if (!String.IsNullOrEmpty(searchString))  // If the searchString is not empty then it will exectute the statement //
+            {
+                patients = patients.Where(p => p.LastName.Contains(searchString) // It can filter the patient's Last name //
+                                       || p.FirstName.Contains(searchString)); // It can filter the patient's First name //
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    patients = patients.OrderByDescending(s => s.LastName);    // This sorts the Patients Last name (Descending) //
+                    break;
+                default:
+                    patients = patients.OrderBy(s => s.LastName);    // This sorts the Patients Last name (Descending) //
+                    break;
+            }
+
+            return View(await patients.ToListAsync());
         }
 
         // GET: Patient/Details/5

@@ -35,11 +35,11 @@ public DbSet<MedicalAppointingSystem.Models.Doctor> Doctor { get; set; } = defau
 public DbSet<MedicalAppointingSystem.Models.Patient> Patient { get; set; } = default!;
 }
 
-public class PatientUserEntityConfiguration : IEntityTypeConfiguration<MedicalAppointingUser>
+public class PatientUserEntityConfiguration : IEntityTypeConfiguration<MedicalAppointingUser>   // This was implimented for my custom field, it creates a new class that impliments the IEntityTypeConfiguration type into the MedicalAppointingUser entity //
 {
     public void Configure(EntityTypeBuilder<MedicalAppointingUser> builder)
     {
-        builder.Property(u => u.FirstName).HasMaxLength(255);
-        builder.Property(u => u.LastName).HasMaxLength(255);
+        builder.Property(u => u.FirstName).HasMaxLength(255);   // This will create a column for FirstName with a max length of 255 characters //
+        builder.Property(u => u.LastName).HasMaxLength(255);   // This will create a column for LastName with a max length of 255 characters //
     }
 }

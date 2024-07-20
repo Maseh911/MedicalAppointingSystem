@@ -8,9 +8,7 @@ var connectionString = builder.Configuration.GetConnectionString("MedicalAppoint
 
 builder.Services.AddDbContext<MedicalAppointingDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<MedicalAppointingUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<MedicalAppointingDbContext>();
+builder.Services.AddDefaultIdentity<MedicalAppointingUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<MedicalAppointingDbContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -36,46 +34,11 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
-DatabaseStartup.StartUp(app);
+DatabaseStartup.StartUp(app);   // This will show the dummy data in the database //
 
-using (var scope = app.Services.CreateScope())
-{
-    var roleManager =
-        scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-    var roles = new[] { "Admin", "HealthcareProvider" };
-
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new IdentityRole(role));
-    }
-}
-
-using (var scope = app.Services.CreateScope())
-{
-    var userManager =
-        scope.ServiceProvider.GetRequiredService<UserManager<MedicalAppointingUser>>();
-
-    string email = "admin@admin.com";
-    string password = "ADMIN123!";
-
-    if (await userManager.FindByEmailAsync(email) == null)
-    {
-        var user = new MedicalAppointingUser();
-        user.UserName = email;
-        user.Email = email;
-        user.FirstName = "Admin";
-        user.LastName = "Admin";
-
-        await userManager.CreateAsync(user, password);
-
-        await userManager.AddToRoleAsync(user, "Admin");
-
-    }
-}
-    app.Run();
+app.Run();
 
 

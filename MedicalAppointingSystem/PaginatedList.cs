@@ -31,3 +31,5 @@ namespace MedicalAppointingSystem
         }
     }
 }
+
+// This is for pagination //

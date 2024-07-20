@@ -72,17 +72,17 @@ namespace MedicalAppointingSystem.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
-            [StringLength(255)]
-            [Display(Name = "First Name")]
-            [NoSpacesOrNumbersOrSymbolsAttribute (ErrorMessage = "The field must contain only letters and no numbers, spaces, or special characters.")]
-            public string FirstName { get; set; }
+            [Required]  // This is a required field //
+            [StringLength(255)] // This limits the max characters for this field to 255 //
+            [Display(Name = "First Name")] // This displays FirstName as First Name //
+            [NoSpacesOrNumbersOrSymbolsAttribute (ErrorMessage = "The field must contain only letters and no numbers, spaces, or special characters.")] // This ensures that no spaces, numbers or symbols are added into this field //
+            public string FirstName { get; set; }   // This is the First Name for the custom fields //
 
-            [Required]
-            [StringLength(255)]
-            [Display(Name = "Last Name")]
-            [NoSpacesOrNumbersOrSymbolsAttribute]
-            public string LastName { get; set; }
+            [Required]  // This is a required field //
+            [StringLength(255)] // This limits the max characters for this field to 255 //
+            [Display(Name = "Last Name")] // This displays LastName as Last Name //
+            [NoSpacesOrNumbersOrSymbolsAttribute (ErrorMessage = "The field must contain only letters and no numbers, spaces, or special characters.")] // This ensures that no spaces, numbers or symbols are added into this field //
+            public string LastName { get; set; }   // This is the Last Name for the custom fields //
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.

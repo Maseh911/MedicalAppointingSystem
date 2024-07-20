@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MedicalAppointingSystem.Areas.Identity.Data;
 using MedicalAppointingSystem.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Reflection.Metadata;
 
 namespace MedicalAppointingSystem.Controllers
 {
@@ -22,10 +23,19 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Doctor
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)  // The searchString parameter represents a keyword of a search which will be used for filtering //
         {
-            var medicalAppointingDbContext = _context.Doctor.Include(d => d.Hospital);
-            return View(await medicalAppointingDbContext.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;       // This will pass the value from the controller to the view to display the filtered value //
+
+            var doctors = from d in _context.Doctor select d;
+
+            if (!String.IsNullOrEmpty(searchString))  // If the searchString is not empty then it will exectute the statement //
+            {
+                doctors = doctors.Where(d => d.LastName.Contains(searchString) // It can filter the doctor's Last name //
+                                       || d.FirstName.Contains(searchString)); // It can filter the doctor's First name //
+            }
+
+            return View(await doctors.ToListAsync());
         }
 
         // GET: Doctor/Details/5

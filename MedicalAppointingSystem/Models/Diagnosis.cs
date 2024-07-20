@@ -6,17 +6,17 @@ namespace MedicalAppointingSystem.Models
 {
     public class Diagnosis
     {
+        // This is the primary key //
         [Key]
         public int DiagnosisId { get; set; }
 
-        [Required(ErrorMessage = "Name of Diagnosis is required")]
-        [Display(Name = "Diagnosis Name")]
-        [MaxLength(30)]
+        [Required(ErrorMessage = "Name of Diagnosis is required")] // This field is required, an error message will popup if nothing is inside the field //
+        [Display(Name = "Diagnosis Name")] // This will display DiagnosisName with Diagnosis Name //
+        [MaxLength(30)] // This limits the max characters for this field to 30 //
         public string DiagnosisName { get; set; }
 
-        [Required]
-        [Display(Name ="Symptoms")]
-        [MaxLength(120)]
+        [Required] // This is a required field //
+        [MaxLength(120)] // This limits the max characters for this field to 120 //
         public string Symptoms { get; set; }
     }
 }
