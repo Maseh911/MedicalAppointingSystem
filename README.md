@@ -1,5 +1,13 @@
 Medical Appointing System
 
+|| --Explanation about my software-- ||
+My software is a appointing system for medical centres such as hospitals, clinics, and sickbays for schools.
+My software consists of the patient, the doctor, when their appointment will be, what diagnosis the patient has, and what medical centre the doctor works at. 
+
+The software works by selecting the PatientId and the DoctorId and putting it in a appointment table, the date and time will be set alongside the patient and the doctor.
+By using search and sorting you will be able to locate the patient and see what diagnosis he has, or the doctor and what hospital he's currently working at.
+
+
 ||--How to use:--||
 To be able to clone and run this application, make sure you have visual studio 2022 downloaded (ASP.Net).
 
