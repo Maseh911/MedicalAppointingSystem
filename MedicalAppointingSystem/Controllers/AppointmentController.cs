@@ -22,7 +22,10 @@ namespace MedicalAppointingSystem.Controllers
         }
 
         // GET: Appointmentthe searchString parameter represents a keyword of a search which is used for filtering
-        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber) // The sortOrder parameter represents the sort order of a list, The searchString parameter represents a keyword of a search which will be used for filtering, the currentFilter parameters represents a current filter being applied to a list this is used for pagination in maintaining the filter, the int? pagenumber parameter is used for pagination, the '?' represents the current page number // 
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber) // The sortOrder parameter represents the sort order of a list,
+                                                                                                                             // The searchString parameter represents a keyword of a search which will be used for filtering,
+                                                                                                                             // the currentFilter parameters represents a current filter being applied to a list this is used for pagination in maintaining the filter,
+                                                                                                                             // the int? pagenumber parameter is used for pagination, the '?' represents the current page number // 
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : ""; // This will determine the next sort order parameter based on the current order (if it has been selected/ordered yet) for name //
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";          // This will determine the next sort order parameter based on the current order (if it has been selected/ordered yet) for date //
